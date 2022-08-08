@@ -1,0 +1,26 @@
+version: '3.8'
+ 
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Api.Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://*:443;http://*:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=1234
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    ports:
+      - 7268:80
+      - 433:433
+    depends_on:
+      - database
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: SuperDuperPassword69
+      POSTGRES_database: my_database
